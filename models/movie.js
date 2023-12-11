@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const { isURL } = require("validator");
+const mongoose = require('mongoose');
+const { isURL } = require('validator');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -27,7 +27,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => isURL(v),
-      message: "Неправильный формат адресса",
+      message: 'Неправильный формат адресса',
     },
   },
   trailerLink: {
@@ -35,7 +35,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => isURL(v),
-      message: "Неправильный формат адресса",
+      message: 'Неправильный формат адресса',
     },
   },
   thumbnail: {
@@ -43,7 +43,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => isURL(v),
-      message: "Неправильный формат адресса",
+      message: 'Неправильный формат адресса',
     },
   },
   owner: {
@@ -64,4 +64,4 @@ const movieSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("movie", movieSchema);
+module.exports = mongoose.model('movie', movieSchema);

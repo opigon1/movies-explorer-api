@@ -17,6 +17,17 @@ mongoose
   .then(() => console.log("Connect!"))
   .catch((err) => console.log(err));
 
+app.use(
+  cors({
+    credentials: true,
+    origin: [
+      "http://localhost:3001",
+      "https://movie.diplom.nomoredomainsmonster.ru",
+      "http://movie.diplom.nomoredomainsmonster.ru",
+      "http://localhost:3000",
+    ],
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

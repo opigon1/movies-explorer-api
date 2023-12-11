@@ -28,4 +28,4 @@
 <hr>
 IP 51.250.37.229
 
-Backend https://api.project.mesto.nomoredomainsmonster.ru
+Backend https://api.movie.diplom.nomoredomainsmonster.ru/

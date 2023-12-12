@@ -5,8 +5,7 @@ const BAD_REQUEST = require('../utils/errors/BAD_REQUEST');
 const NOT_FOUND = require('../utils/errors/NOT_FOUND');
 const CONFLICT = require('../utils/errors/CONFLICT');
 const UNAUTHORIZED = require('../utils/errors/UNAUTHORIZED');
-
-const { JWT_SECRET, NODE_ENV } = process.env;
+const { JWT_SECRET, NODE_ENV } = require('../utils/config');
 
 module.exports.getUserinfo = (req, res, next) => {
   User.findById(req.user._id)
@@ -36,6 +35,9 @@ module.exports.updateUser = (req, res, next) => {
             'Переданы некорректные данные при обновлении пользователя',
           ),
         );
+      }
+      if (err.code === 11000) {
+        return next(new CONFLICT('Такой пользователь уже существует'));
       }
       return next(err);
     });
@@ -76,33 +78,32 @@ module.exports.login = (req, res, next) => {
       if (!matched) {
         return next(new UNAUTHORIZED('Передан некорректный пароль'));
       }
-      return jwt.sign(
+      const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         {
           expiresIn: '7d',
         },
       );
-    })
-      .then((token) => {
-        res
-          .cookie('jwt', token, {
-            httpOnly: true,
-            sameSite: true,
-            maxAge: 3600000 * 24 * 7,
-          })
-          .status(200)
-          .send({
-            message: 'Аутентификация прошла успешно',
-          });
-      }))
+      res
+        .cookie('jwt', token, {
+          httpOnly: true,
+          sameSite: true,
+          maxAge: 3600000 * 24 * 7,
+        })
+        .status(200)
+        .send({
+          message: 'Аутентификация прошла успешно',
+        });
+      return User;
+    }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(
           new BAD_REQUEST('Поле email или password не должны быть пустыми'),
         );
       }
-      return next(new UNAUTHORIZED('Передан неккоректный email или пароль'));
+      return next(new UNAUTHORIZED('Передан неккоректный email'));
     });
 };
 

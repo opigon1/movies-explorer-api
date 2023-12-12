@@ -9,7 +9,7 @@ const errorHandler = require('./middlewares/errors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { DB_URL } = require('./utils/config');
 
-const { PORT } = process.env;
+const { PORT = 3000 } = process.env;
 const app = express();
 mongoose.connect(DB_URL);
 

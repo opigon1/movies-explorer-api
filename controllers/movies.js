@@ -32,7 +32,7 @@ module.exports.createMovie = (req, res, next) => {
     thumbnail,
     movieId,
   })
-    .then((movie) => res.status(201).send({ data: movie }))
+    .then((movie) => res.status(201).send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new BAD_REQUEST('Переданы некорректные данные'));
@@ -44,7 +44,7 @@ module.exports.createMovie = (req, res, next) => {
 module.exports.getMovies = (req, res, next) => {
   const owner = req.user._id;
   Movie.find({ owner })
-    .then((movies) => res.send({ data: movies }))
+    .then((movies) => res.send(movies))
     .catch((err) => next(err));
 };
 
